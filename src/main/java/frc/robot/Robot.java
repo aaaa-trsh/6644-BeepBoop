@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
-        robotContainer.drivebase.resetOdometry(new Pose2d(Units.inchesToMeters(14), Units.inchesToMeters(16), new Rotation2d(0)));
+        // robotContainer.drivebase.resetOdometry(new Pose2d(Units.inchesToMeters(14), Units.inchesToMeters(16), new Rotation2d(0)));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        robotContainer.drivebase.resetOdometry(new Pose2d(Units.inchesToMeters(14), Units.inchesToMeters(16), new Rotation2d(0)));
+        // robotContainer.drivebase.resetOdometry(new Pose2d(Units.inchesToMeters(14), Units.inchesToMeters(16), new Rotation2d(0)));
     }
 
     @Override

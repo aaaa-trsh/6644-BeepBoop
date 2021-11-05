@@ -116,7 +116,7 @@ public class DriveSubsystem extends SubsystemBase
 
     public void tankDriveVolts(final double leftVolts, final double rightVolts) {
         differentialDrive.tankDrive(leftVolts / 12, rightVolts / 12);
-        System.out.println(pose.getX() + " " + pose.getY());
+        System.out.println(leftVolts / 12 + "   " + rightVolts / 12);
     }
 
     public void arcadeDrive(final double forward, final double turn) {

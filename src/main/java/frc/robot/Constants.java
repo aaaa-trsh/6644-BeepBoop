@@ -18,8 +18,8 @@ public final class Constants {
         public static double kD = 0.3;
 
         public static double kTurnP = .02;
-        public static double kTurnI = 0.0;
-        public static double kTurnD = 0.003;
+        public static double kTurnI = 0.04;
+        public static double kTurnD = 0.005;
 
         public static int kDriveEncoderResolution = 360;
         public static double kWheelDiameter = 6; // inches
