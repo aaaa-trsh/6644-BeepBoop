@@ -1,16 +1,11 @@
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
-import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
@@ -20,22 +15,17 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.CircleA2BCommand;
 import frc.robot.subsystems.*;
-import frc.robot.utils.KVector2;
+import frc.robot.utils.Vector2;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -172,9 +162,9 @@ public class RobotContainer {
         //     drivebase
         // );
         return new CircleA2BCommand(
-            () -> new KVector2(drivebase.getPose()),
+            () -> new Vector2(drivebase.getPose()),
             () -> drivebase.getPose().getRotation(),
-            () -> new KVector2(-1, 0),
+            () -> new Vector2(.15, 0.001),
             new PIDController(80, 0, 0),
             3,
             drivebase.getKinematics(),

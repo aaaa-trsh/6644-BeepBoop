@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.utils.KLine;
-import frc.robot.utils.KVector2;
+import frc.robot.utils.Line;
+import frc.robot.utils.Vector2;
 
 public class CircleA2BCommand extends CommandBase {
-    private Supplier<KVector2> poseSupplier;
+    private Supplier<Vector2> posSupplier;
     private Supplier<Rotation2d> rotationSupplier;
-    private Supplier<KVector2> goalSupplier;
+    private Supplier<Vector2> goalSupplier;
     private PIDController wheelPIDController;
     private double velocity;
     private DifferentialDriveKinematics kinematics;
@@ -25,9 +25,9 @@ public class CircleA2BCommand extends CommandBase {
     private BiConsumer<Double, Double> outputVolts;
 
     public CircleA2BCommand(
-        Supplier<KVector2> startSupplier, 
+        Supplier<Vector2> startSupplier, 
         Supplier<Rotation2d> rotationSupplier, 
-        Supplier<KVector2> goalSupplier,
+        Supplier<Vector2> goalSupplier,
         PIDController wheelPIDController,
         double velocity,
         DifferentialDriveKinematics kinematics,
@@ -35,7 +35,7 @@ public class CircleA2BCommand extends CommandBase {
         DriveSubsystem drivetrain
     ) {
         addRequirements(drivetrain);
-        this.poseSupplier = startSupplier;
+        this.posSupplier = startSupplier;
         this.rotationSupplier = rotationSupplier;
         this.goalSupplier = goalSupplier;
         this.wheelPIDController = wheelPIDController;
@@ -52,20 +52,33 @@ public class CircleA2BCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double radius = new KLine(poseSupplier.get(), Math.tan(rotationSupplier.get().getRadians())).getIntersection(
-            KLine.perpendicularBisector(poseSupplier.get(), goalSupplier.get())
-        ).distanceTo(poseSupplier.get());
-        System.out.println("rad: "+radius);
-        double angularVelocity = velocity / radius;
+        var heading = rotationSupplier.get();
+        var robotLine = new Line(posSupplier.get(), Math.tan(rotationSupplier.get().getRadians()));
+        var abBisect = Line.perpendicularBisector(posSupplier.get(), goalSupplier.get());
+        // System.out.println(abBisect);
+        var center = robotLine.getIntersection(abBisect);
+        var radius = center.distanceTo(posSupplier.get());
+        var immediateGoal = goalSupplier.get();
+        var relativeGoal = immediateGoal.sub(posSupplier.get());
+        var localGoal = new Vector2(
+            Math.cos(-heading.getRadians()) * relativeGoal.x - Math.sin(-heading.getRadians()) * relativeGoal.y,
+            Math.sin(-heading.getRadians()) * relativeGoal.x + Math.cos(-heading.getRadians()) * relativeGoal.y
+        );
+
+        
+        // System.out.println("rad: "+radius);
+        // double angularVelocity = velocity / radius;
         
         // var chassisSpeeds = new ChassisSpeeds(velocity, 0, angularVelocity);
-        var chassisSpeeds = new ChassisSpeeds(1, 0, Math.PI/2);
+        var angularVelocity = localGoal.x / (radius * radius);
+        var chassisSpeeds = new ChassisSpeeds(velocity, 0, angularVelocity);
         wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
         double leftVelocity = wheelSpeeds.leftMetersPerSecond;
         double rightVelocity = wheelSpeeds.rightMetersPerSecond;
         double leftVolts = wheelPIDController.calculate(drivetrain.getLeftEncoder().getRate(), leftVelocity);
         double rightVolts = wheelPIDController.calculate(drivetrain.getRightEncoder().getRate(), rightVelocity);
         outputVolts.accept(leftVolts, rightVolts);
+        System.out.println(posSupplier.get().distanceTo(immediateGoal) + " curvature:" + angularVelocity);
     }
 
     @Override
