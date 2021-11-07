@@ -34,6 +34,6 @@ public class Line {
     }
 
     public String toString() {
-        return "Line(slope=" + slope + ", y-int=" + yIntercept + ")";
+        return "Line(slope=" + Math.round(slope * 100.0)/100.0 + ", y-int=" + Math.round(yIntercept * 100.0)/100.0 + ")";
     }
 }

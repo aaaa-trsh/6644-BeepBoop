@@ -71,6 +71,6 @@ public class Vector2 {
     }
 
     public String toString() {
-        return "(" + x + ", " + y + ")";
+        return "(" + Math.round(x * 100.)/100. + ", " + Math.round(y * 100.)/100. + ")";
     }
 }

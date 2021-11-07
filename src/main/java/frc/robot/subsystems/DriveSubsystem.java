@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.util.Units;
-// import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -25,7 +25,9 @@ public class DriveSubsystem extends SubsystemBase
 {
     Encoder leftEncoder = new Encoder(DriveConstants.kLeftEncoderPorts[0], DriveConstants.kLeftEncoderPorts[1], true);
     Encoder rightEncoder = new Encoder(DriveConstants.kRightEncoderPorts[0], DriveConstants.kRightEncoderPorts[1], false);
-    
+    EncoderSim leftEncoderSim = new EncoderSim(leftEncoder);
+    EncoderSim rightEncoderSim = new EncoderSim(rightEncoder);
+
     WPI_VictorSPX leftFront = new WPI_VictorSPX(DriveConstants.kLeftMotorPorts[0]);
     WPI_VictorSPX leftFollower = new WPI_VictorSPX(DriveConstants.kLeftMotorPorts[1]);
     WPI_VictorSPX rightFront = new WPI_VictorSPX(DriveConstants.kRightMotorPorts[0]);
@@ -47,8 +49,6 @@ public class DriveSubsystem extends SubsystemBase
 
     Solenoid transmissionSolenoidL = new Solenoid(0);
     Solenoid transmissionSolenoidR = new Solenoid(1);
-
-    // Field2d field;
 
     public DriveSubsystem() 
     {
@@ -75,13 +75,6 @@ public class DriveSubsystem extends SubsystemBase
         rightEncoder.reset();
         leftEncoder.setDistancePerPulse(DriveConstants.kDriveEncoderDPP);
         rightEncoder.setDistancePerPulse(DriveConstants.kDriveEncoderDPP);
-
-        // SmartDashboard.putNumber("Rotation", getGyroHeading().getDegrees());
-        // SmartDashboard.putNumber("X", getPose().getTranslation().getX());
-        // SmartDashboard.putNumber("Y", getPose().getTranslation().getY());
-        // SmartDashboard.putNumber("left", getLeftEncoder().getDistance());
-        // SmartDashboard.putNumber("right", getRightEncoder().getDistance());
-        // SmartDashboard.putData("Field", field);
     }
 
     public void setTransmission(final boolean on) {
