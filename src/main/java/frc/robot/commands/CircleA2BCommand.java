@@ -75,13 +75,14 @@ public class CircleA2BCommand extends CommandBase {
         var left = wheelPIDController.calculate(drivetrain.getLeftEncoder().getRate(), angularVelocity + baseVel);
         var right = wheelPIDController.calculate(drivetrain.getLeftEncoder().getRate(), angularVelocity + baseVel);
         
-        if (i % 5 == 0) {
-            System.out.println(
-                "goal at: " + localGoal + 
-                " | distance: " + Math.round(localGoal.len() * 100.0)/100.0 + 
-                " | curvature: " + Math.round(angularVelocity * 100.0)/100.0);
-            i = 0;
-        }
+        // if (i % 5 == 0) {
+        //     System.out.println(
+        //         "goal at: " + localGoal + 
+        //         " | distance: " + Math.round(localGoal.len() * 100.0)/100.0 + 
+        //         " | curvature: " + Math.round(angularVelocity * 100.0)/100.0 +
+        //         " | speeds: left="+left+" right="+right);
+        //     i = 0;
+        // }
         
         outputVolts.accept(left, right);
     }

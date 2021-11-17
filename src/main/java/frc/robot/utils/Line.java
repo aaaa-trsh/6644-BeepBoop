@@ -19,6 +19,9 @@ public class Line {
         this.yIntercept = yIntercept;
     }
 
+    public double getSlope() { return slope; }
+    public double getYIntercept() { return yIntercept; }
+
     public static Line perpendicularBisector(Vector2 p1, Vector2 p2) {
         Vector2 p = Vector2.lerp(p1, p2, 0.5);
         double dx = p2.x - p1.x;
